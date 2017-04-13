@@ -115,12 +115,17 @@ LOGGING = {
     'loggers': {
         'opsweb': {
             'level': 'DEBUG',
-            'handlers': ['console_handle'],
+            'handlers': ['console_handle', 'opsweb_file_handler'],   # 可以输出多个目标
         },
     },
     'handlers': {
         'console_handle': {
             'class': 'logging.StreamHandler',  # 打印到屏幕
+            'formatter':'opsweb',
+        },
+        'opsweb_file_handler':{
+            'class': 'logging.FileHandler', # 记录日志到文件中
+            'filename': os.path.join(BASE_DIR, "logs", 'opsweb.log'), # 相对路径 目录 文件名  （目录必须存在否则报错）
             'formatter':'opsweb',
         },
     },
