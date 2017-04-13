@@ -117,6 +117,10 @@ LOGGING = {
             'level': 'DEBUG',
             'handlers': ['console_handle', 'opsweb_file_handler'],   # 可以输出多个目标
         },
+        "django":{  # django 内置logger
+             "level"  : "DEBUG",
+            'handlers': [ 'django_handler'],
+        },
     },
     'handlers': {
         'console_handle': {
@@ -126,6 +130,11 @@ LOGGING = {
         'opsweb_file_handler':{
             'class': 'logging.FileHandler', # 记录日志到文件中
             'filename': os.path.join(BASE_DIR, "logs", 'opsweb.log'), # 相对路径 目录 文件名  （目录必须存在否则报错）
+            'formatter':'opsweb',
+        },
+        'django_handler':{
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, "logs", 'django.log'),
             'formatter':'opsweb',
         },
     },
