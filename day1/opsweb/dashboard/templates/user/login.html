@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://cdn.staticfile.org/jquery/1.12.2/jquery.min.js"></script>
+    <title>{{ title }}</title>
+</head>
+<body>
+<ul>
+    <form action="/dashboard/login/" method="post">
+        <li><input type="text" name="username" value="" id="username"></li>
+        <li><input type="text" name="password" id="password"></li>
+        <li><input type="submit" value="登录" id="form_submit"></li>
+    </form>
+</ul>
+</body>
+
+<script>
+    $(function () {
+        $("#form_submit").click(function () {
+            var username = $("#username").val();
+            var password = $("#password").val();
+            console.log(username);
+            console.log(password);
+            $.post("/dashboard/login/",
+                {username: username, password: password},
+                function (data) { // 服务处理完以后会返回data数据
+                    alert("返回信息: " + data);
+                });
+            return false;
+        });
+    });
+</script>
+</html>
+
