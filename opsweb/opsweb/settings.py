@@ -121,6 +121,10 @@ LOGGING = {
              "level"  : "DEBUG",
             'handlers': [ 'django_handler'],
         },
+        "django.request":{  # django 内置logger  请求日志 400 500类的错
+             "level"  : "DEBUG",
+            'handlers': [ 'django_request_handler'],
+        },
     },
     'handlers': {
         'console_handle': {
@@ -135,6 +139,11 @@ LOGGING = {
         'django_handler':{
             'class': 'logging.FileHandler',
             'filename': os.path.join(BASE_DIR, "logs", 'django.log'),
+            'formatter':'opsweb',
+        },
+        'django_request_handler':{
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, "logs", 'django_request.log'),
             'formatter':'opsweb',
         },
     },
