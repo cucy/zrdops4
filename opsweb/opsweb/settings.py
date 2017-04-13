@@ -109,3 +109,27 @@ STATICFILES_DIRS = (
 # 页面跳转模板
 TEMPLATE_JUMP  = "public/jump.html"
 
+LOGGING = {
+    'version': 1,
+    # 有多个handlers
+    'loggers': {
+        'opsweb': {
+            'level': 'DEBUG',
+            'handlers': ['console_handle'],
+        },
+    },
+    'handlers': {
+        'console_handle': {
+            'class': 'logging.StreamHandler',  # 打印到屏幕
+            'formatter':'opsweb',
+        },
+    },
+    'formatters': {
+        'opsweb': {
+            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        },
+    },
+}

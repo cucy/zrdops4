@@ -5,7 +5,8 @@ from django.views.generic import View
 from django.template import Context, loader, RequestContext, Template
 from django.contrib.auth import authenticate, login, logout
 
-
+import logging
+logger = logging.getLogger('opsweb')
 
 
 
@@ -41,7 +42,7 @@ def logout_view(request):
 
 class IndexView(View):
     def get(self, requet):
-        
+        logger.debug('这是首页测试')
         return render(requet, "public/index.html")
 
 
