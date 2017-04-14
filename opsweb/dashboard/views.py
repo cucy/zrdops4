@@ -4,10 +4,11 @@ from django.http import HttpResponse, JsonResponse, QueryDict
 from django.views.generic import View
 from django.template import Context, loader, RequestContext, Template
 from django.contrib.auth import authenticate, login, logout
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required, permission_required
 
 import logging
 logger = logging.getLogger('opsweb')
-
 
 
 def login_view(request):
@@ -32,15 +33,14 @@ def login_view(request):
         return JsonResponse(ret, safe=True)
 
 
-
 def logout_view(request):
     logout(request)
     return HttpResponse("用户退出成功")
 
 
-
-
 class IndexView(View):
+    @method_decorator(login_required)
+    # @method_decorator(permission_required("dashboard.views"))
     def get(self, requet):
         logger.debug('这是首页测试')
         return render(requet, "public/index.html")

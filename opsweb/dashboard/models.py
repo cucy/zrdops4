@@ -1,3 +1,4 @@
+#coding:utf8
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -22,6 +23,9 @@ class Server(models.Model):
 
     class Meta:
         db_table = "server"
+        permissions = {
+            ('view_server', '访问服务服务器信息')
+        }
 
 
 class Department(models.Model):
