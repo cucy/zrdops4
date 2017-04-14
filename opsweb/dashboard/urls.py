@@ -21,6 +21,11 @@ urlpatterns = [
     ])),
     # 组
     url(r'^group/', include([
+        #  获取用户组信息
+        url(r'^$', group.GroupView.as_view()),
+        # 组列表
         url(r'^list/$', group.GroupListView.as_view(), name='group_list'),
+        # 用户 添加到 组显示下拉框内容
+        url(r'^usergroup/$', group.UserGroupView.as_view()),
     ])),
 ]

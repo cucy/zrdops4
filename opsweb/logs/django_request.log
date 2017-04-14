@@ -214,3 +214,17 @@ Traceback (most recent call last):
   File "C:\Python27\lib\site-packages\django\core\urlresolvers.py", line 495, in _reverse_with_prefix
     (lookup_view_s, args, kwargs, len(patterns), patterns))
 NoReverseMatch: Reverse for 'group_group_list' with arguments '()' and keyword arguments '{}' not found. 0 pattern(s) tried: []
+ERROR 2017-04-14 22:38:19,549 base 9716 9040 Internal Server Error: /group/
+Traceback (most recent call last):
+  File "C:\Python27\lib\site-packages\django\core\handlers\base.py", line 223, in get_response
+    response = middleware_method(request, response)
+  File "C:\Python27\lib\site-packages\django\middleware\clickjacking.py", line 31, in process_response
+    if response.get('X-Frame-Options', None) is not None:
+AttributeError: 'list' object has no attribute 'get'
+ERROR 2017-04-14 22:40:05,423 base 9716 9196 Internal Server Error: /group/
+Traceback (most recent call last):
+  File "C:\Python27\lib\site-packages\django\core\handlers\base.py", line 223, in get_response
+    response = middleware_method(request, response)
+  File "C:\Python27\lib\site-packages\django\middleware\clickjacking.py", line 31, in process_response
+    if response.get('X-Frame-Options', None) is not None:
+AttributeError: 'list' object has no attribute 'get'

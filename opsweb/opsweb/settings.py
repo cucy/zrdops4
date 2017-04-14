@@ -114,6 +114,7 @@ TEMPLATE_JUMP  = "public/jump.html"
 # 无权限显示页面 跳转
 PERMISSION_NONE_URL = '/permission/none/'
 
+
 LOGGING = {
     'version': 1,
     # 有多个handlers
