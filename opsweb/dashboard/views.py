@@ -5,7 +5,8 @@ from django.views.generic import View
 from django.template import Context, loader, RequestContext, Template
 from django.contrib.auth import authenticate, login, logout
 from django.utils.decorators import method_decorator
-from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.decorators import permission_required
+from django.contrib.auth.decorators import login_required  # 登录验证
 
 import logging
 logger = logging.getLogger('opsweb')
@@ -39,10 +40,10 @@ def logout_view(request):
 
 
 class IndexView(View):
-    @method_decorator(login_required)
+    @method_decorator(login_required) # 登录验证装饰器如果不登录直接让其跳转到setting中设置的LOGIN_URL
     # @method_decorator(permission_required("dashboard.views"))
     def get(self, requet):
-        logger.debug('这是首页测试')
+        # logger.debug('这是首页测试')
         return render(requet, "public/index.html")
 
 

@@ -224,3 +224,11 @@ DEBUG 2017-04-14 17:58:28,282 utils 9520 9736 (0.000) SELECT `user_profile`.`id`
 DEBUG 2017-04-14 17:58:28,286 utils 9520 9736 (0.001) SELECT `department`.`id`, `department`.`name` FROM `department` WHERE `department`.`id` = 2; args=(2,)
 DEBUG 2017-04-14 17:58:28,289 utils 9520 9736 (0.001) SELECT `user_profile`.`id`, `user_profile`.`user_id`, `user_profile`.`phone`, `user_profile`.`title`, `user_profile`.`chinaname`, `user_profile`.`department_id` FROM `user_profile` WHERE `user_profile`.`user_id` = 2; args=(2,)
 DEBUG 2017-04-14 17:58:28,292 utils 9520 9736 (0.001) SELECT `department`.`id`, `department`.`name` FROM `department` WHERE `department`.`id` = 2; args=(2,)
+DEBUG 2017-04-14 18:02:34,200 utils 7252 8928 (0.001) SET SQL_AUTO_IS_NULL = 0; args=None
+DEBUG 2017-04-14 18:02:34,249 utils 7252 8928 (0.001) SET SQL_AUTO_IS_NULL = 0; args=None
+DEBUG 2017-04-14 18:02:34,252 utils 7252 8928 (0.003) SHOW FULL TABLES; args=None
+DEBUG 2017-04-14 18:02:34,257 utils 7252 8928 (0.000) SELECT `django_migrations`.`app`, `django_migrations`.`name` FROM `django_migrations`; args=()
+DEBUG 2017-04-14 18:04:58,075 utils 7404 9668 (0.001) SET SQL_AUTO_IS_NULL = 0; args=None
+DEBUG 2017-04-14 18:04:58,137 utils 7404 9668 (0.000) SET SQL_AUTO_IS_NULL = 0; args=None
+DEBUG 2017-04-14 18:04:58,140 utils 7404 9668 (0.002) SHOW FULL TABLES; args=None
+DEBUG 2017-04-14 18:04:58,153 utils 7404 9668 (0.002) SELECT `django_migrations`.`app`, `django_migrations`.`name` FROM `django_migrations`; args=()
