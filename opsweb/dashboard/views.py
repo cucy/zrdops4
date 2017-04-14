@@ -5,8 +5,9 @@ from django.views.generic import View
 from django.template import Context, loader, RequestContext, Template
 from django.contrib.auth import authenticate, login, logout
 from django.utils.decorators import method_decorator
-from django.contrib.auth.decorators import permission_required
+from django.contrib.auth.decorators import permission_required # 权限验证
 from django.contrib.auth.decorators import login_required  # 登录验证
+from django.conf import settings
 
 import logging
 logger = logging.getLogger('opsweb')
@@ -40,33 +41,14 @@ def logout_view(request):
 
 
 class IndexView(View):
-    @method_decorator(login_required) # 登录验证装饰器如果不登录直接让其跳转到setting中设置的LOGIN_URL
-    # @method_decorator(permission_required("dashboard.views"))
+    # @method_decorator(login_required) # 登录验证装饰器如果不登录直接让其跳转到setting中设置的LOGIN_URL
+    # 如果没有权限就跳转到指定的页面
+    @method_decorator(permission_required("dashboard.view_server", login_url=settings.PERMISSION_NONE_URL))
     def get(self, requet):
         # logger.debug('这是首页测试')
         return render(requet, "public/index.html")
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# 用户无权限时跳转到此指定页面
+def permission(requet):
+    return render(requet, 'public/nopermission.html',{})
