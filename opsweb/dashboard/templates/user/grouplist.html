@@ -14,7 +14,7 @@
             <tr>
                 <td>{{ group.name }}</td>
                 <td>
-                    <button class="btn btn-primary">操作</button>
+                    <button class="btn btn-primary btn-sm show_group_users" data='{"gid": "{{ group.id }}", "groupname": "{{ group.name }}"}'>成员列表</button>
                 </td>
 
             </tr>
@@ -43,6 +43,27 @@
             </div>
         </div>
     </div>
+
+{#    模态框 查看组内成员S #}
+        <div class="modal fade" id="modal_show_group_users_list" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">×</button>
+                    <h4>用户组名: <span id="modal_show_group_users_list_title"></span></h4>
+                </div>
+                <div class="modal-body form-inline" id="modal_show_group_users_content_list">
+
+                </div>
+                <div class="modal-footer">
+                    <input class="btn btn-default" data-dismiss="modal" aria-hidden="true" type="button" value="确定">
+                </div>
+            </div>
+        </div>
+    </div>
+{#    模态框 查看组内成员E#}
+
 
 {% endblock %}
 
@@ -83,7 +104,53 @@
                     })
                 })
             });
-        })
+
+
+
+    // 查看组内成员
+         $(".show_group_users").click(function(){
+                var data = JSON.parse($(this).attr('data'));
+                var groupid = data.gid;
+                $.get("/group/usergroup/", {"gid": groupid},function(res){
+                    var html = '<table class="table table-striped">';
+                    $.each(res, function(n, obj){
+                        html += '<tr>';
+                        html += '<td>'+obj.name+'</td>';
+                        html += '<td>'+obj.username+'</td>';
+                        html += '<td>'+obj.email+'</td>';
+                        html += '<td><button class="btn btn-danger btn-xs del_group_user" data="'+obj.id+'">删除</button></td>';
+                        html += '</tr>'
+                    });
+                    html += '</table>';
+                    $("#modal_show_group_users_list_title").html(data.groupname);
+                    $("#modal_show_group_users_content_list").html(html);
+                    $("#modal_show_group_users_list").modal("show");
+                    
+                    // 用组列表中删除用户
+                    $(".del_group_user").click(function(){
+                        var click_obj = $(this);
+                        var userid = click_obj.attr('data');
+                        $.ajax({
+                            url:"/group/usergroup/",
+                            type: "DELETE",
+                            data: {"groupid": groupid, "userid": userid},
+                            datatype: "json",
+                            success: function(res){
+                                if (res.status == 0){
+                                    click_obj.parents("tr").remove();
+                                    swal("操作成功", "", "success")
+                                }else{
+                                    swal("操作失败", res.errmsg, "error")
+                                }
+                            }
+                        })
+
+                    })
+                });
+
+            })
+
+       })
     </script>
 
 {% endblock %}

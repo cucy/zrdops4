@@ -228,3 +228,59 @@ Traceback (most recent call last):
   File "C:\Python27\lib\site-packages\django\middleware\clickjacking.py", line 31, in process_response
     if response.get('X-Frame-Options', None) is not None:
 AttributeError: 'list' object has no attribute 'get'
+ERROR 2017-04-14 22:52:41,842 base 9976 5184 Internal Server Error: /group/usergroup/
+Traceback (most recent call last):
+  File "C:\Python27\lib\site-packages\django\core\handlers\base.py", line 132, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python27\lib\site-packages\django\views\generic\base.py", line 71, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "C:\Python27\lib\site-packages\django\views\generic\base.py", line 89, in dispatch
+    return handler(request, *args, **kwargs)
+  File "C:/Users/z/Desktop/tmp/opsweb\dashboard\user\group.py", line 58, in get
+    user_groups = user.groups.all()
+UnboundLocalError: local variable 'user' referenced before assignment
+ERROR 2017-04-14 22:53:06,236 base 9976 2260 Internal Server Error: /group/usergroup/
+Traceback (most recent call last):
+  File "C:\Python27\lib\site-packages\django\core\handlers\base.py", line 132, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python27\lib\site-packages\django\views\generic\base.py", line 71, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "C:\Python27\lib\site-packages\django\views\generic\base.py", line 89, in dispatch
+    return handler(request, *args, **kwargs)
+  File "C:/Users/z/Desktop/tmp/opsweb\dashboard\user\group.py", line 58, in get
+    user_groups = user.groups.all()
+UnboundLocalError: local variable 'user' referenced before assignment
+ERROR 2017-04-14 22:53:07,099 base 9976 10088 Internal Server Error: /group/usergroup/
+Traceback (most recent call last):
+  File "C:\Python27\lib\site-packages\django\core\handlers\base.py", line 132, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python27\lib\site-packages\django\views\generic\base.py", line 71, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "C:\Python27\lib\site-packages\django\views\generic\base.py", line 89, in dispatch
+    return handler(request, *args, **kwargs)
+  File "C:/Users/z/Desktop/tmp/opsweb\dashboard\user\group.py", line 58, in get
+    user_groups = user.groups.all()
+UnboundLocalError: local variable 'user' referenced before assignment
+ERROR 2017-04-14 22:54:06,263 base 9976 9512 Internal Server Error: /group/usergroup/
+Traceback (most recent call last):
+  File "C:\Python27\lib\site-packages\django\core\handlers\base.py", line 132, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python27\lib\site-packages\django\views\generic\base.py", line 71, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "C:\Python27\lib\site-packages\django\views\generic\base.py", line 89, in dispatch
+    return handler(request, *args, **kwargs)
+  File "C:/Users/z/Desktop/tmp/opsweb\dashboard\user\group.py", line 58, in get
+    user_groups = user.groups.all()
+UnboundLocalError: local variable 'user' referenced before assignment
+ERROR 2017-04-14 22:55:01,288 base 9976 10008 Internal Server Error: /group/usergroup/
+Traceback (most recent call last):
+  File "C:\Python27\lib\site-packages\django\core\handlers\base.py", line 132, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Python27\lib\site-packages\django\views\generic\base.py", line 71, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "C:\Python27\lib\site-packages\django\views\generic\base.py", line 89, in dispatch
+    return handler(request, *args, **kwargs)
+  File "C:/Users/z/Desktop/tmp/opsweb\dashboard\user\group.py", line 58, in get
+    user_groups = user.groups.all()
+UnboundLocalError: local variable 'user' referenced before assignment
+WARNING 2017-04-14 23:04:13,045 base 10100 11180 Not Found: /group/grouplist
