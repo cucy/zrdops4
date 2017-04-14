@@ -9,8 +9,8 @@ from django.contrib.auth.decorators import permission_required # 权限验证
 from django.contrib.auth.decorators import login_required  # 登录验证
 from django.conf import settings
 
-import logging
-logger = logging.getLogger('opsweb')
+# import logging
+# logger = logging.getLogger('opsweb')
 
 
 def login_view(request):

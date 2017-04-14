@@ -5,8 +5,9 @@ from django.http import JsonResponse, HttpResponse, Http404
 from django.contrib.auth.models import User
 from dashboard.models import Department
 from django.utils.decorators import method_decorator
+
+from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required, permission_required
-from django.core.paginator import Paginator, EmptyPage
 
 from django.conf import settings
 """
@@ -97,6 +98,8 @@ class ModifyDepartmentView(TemplateView):
 
         return context
 
+    @method_decorator(login_required)
+    @method_decorator(permission_required("dashboard.change_department", login_url=settings.PERMISSION_NONE_URL))
     def post(self, request):
         user_id = request.POST.get('id', None)
         department_id = request.POST.get('department', None)
@@ -117,6 +120,8 @@ class ModifyDepartmentView(TemplateView):
             user_obj.profile.save()
         return redirect("/user/userlist/")
 
+    @method_decorator(login_required)
+    @method_decorator(permission_required("dashboard.change_department", login_url=settings.PERMISSION_NONE_URL))
     def get(self, request, *args, **kwargs):
         self.request = request
         return super(ModifyDepartmentView, self).get(request, *args, **kwargs)
@@ -154,7 +159,7 @@ class ModifyUserPhoneView(TemplateView):
         try:
             user_obj.profile.phone = request.POST.get('phone',None)
         except Exception as e:
-            print e
+            print(e)
         #    保存User.profile模型
         user_obj.profile.save()
         return render(request,settings.TEMPLATE_JUMP,{"status": 0, "next_url": "/user/userlist/"})

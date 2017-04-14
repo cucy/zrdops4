@@ -41,8 +41,14 @@
                             <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-                            <li role="presentation"><a role="menuitem" tabindex="-1" href="/user/modifydepartment/?user={{ user.id }}">部门</a></li>
-                            <li role="presentation"><a role="menuitem" tabindex="-1" href="{% url 'dashboard:modify_user_phone' %}?uid={{ user.id }}">手机</a></li>
+                            {# 如果有权限才能显示 perms固定写法 应用名dashboard  change_department codename#}
+                            {% if perms.dashboard.change_department %}
+                                <li role="presentation"><a role="menuitem" tabindex="-1"
+                                                           href="/user/modifydepartment/?user={{ user.id }}">部门</a></li>
+                            {% endif %}
+                            <li role="presentation"><a role="menuitem" tabindex="-1"
+                                                       href="{% url 'dashboard:modify_user_phone' %}?uid={{ user.id }}">手机</a>
+                            </li>
                         </ul>
                     </div>
                     {% if user.is_active %}
