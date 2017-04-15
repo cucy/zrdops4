@@ -3,7 +3,9 @@
 {% block body %}
     <table class="table table-striped">
         <caption>
+             {% if perms.auth.add_group %}
             <button id="add_group" class="btn btn-primary" type="button">添加组</button>
+            {% endif %}
         </caption>
         <tr>
             <th>用户组</th>
@@ -14,7 +16,10 @@
             <tr>
                 <td>{{ group.name }}</td>
                 <td>
-                    <button class="btn btn-primary btn-sm show_group_users" data='{"gid": "{{ group.id }}", "groupname": "{{ group.name }}"}'>成员列表</button>
+                    {% if perms.auth.delete_group %}
+                           <button class="btn btn-primary btn-sm show_group_users" data='{"gid": "{{ group.id }}", "groupname": "{{ group.name }}"}'>成员列表</button>
+                    {% endif %}
+                    <a class="btn btn-danger btn-primary btn-sm show_group_users"  {% if perms.auth.delete_group %}href="/group/permission/?gid={{ group.id }}"{%  else %}href=""{% endif %}>修改权限</a>
                 </td>
 
             </tr>

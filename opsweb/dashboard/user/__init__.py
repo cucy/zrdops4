@@ -4,12 +4,14 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse, HttpResponse, Http404
 from django.contrib.auth.models import User
 from dashboard.models import Department
-from django.utils.decorators import method_decorator
 
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required, permission_required
 
 from django.conf import settings
+
+import  logging
+logger = logging.getLogger('opsweb')
 """
 from django.views.generic import TemplateView, View, ListView
 from django.shortcuts import render, redirect, get_object_or_404
@@ -71,6 +73,8 @@ class UserListView(ListView):
 
 
 class ModifyUserStatusView(View):
+    @method_decorator(login_required)
+    @method_decorator(permission_required("auth.change_user", login_url=settings.PERMISSION_NONE_URL))
     def post(self, request):
         ret = {"status": 0}
 
@@ -105,17 +109,19 @@ class ModifyDepartmentView(TemplateView):
         department_id = request.POST.get('department', None)
         if not user_id or not department_id:
             raise Http404
-
         try:
             user_obj = User.objects.get(pk=user_id)
             # 通过id 查询用户
+            # user_obj.profile.user = user_obj.id
             department_obj = Department.objects.get(pk=department_id)
             # 通过id查询部门
-        except:
+        except Exception as e:
             # 查询不到结果则报错
+            logger.error(''.format(e.args))
             raise Http404
         else:
             # 修改部门的的id,后保存
+
             user_obj.profile.department = department_obj
             user_obj.profile.save()
         return redirect("/user/userlist/")
@@ -129,8 +135,6 @@ class ModifyDepartmentView(TemplateView):
 
 class ModifyUserPhoneView(TemplateView):
     template_name = "user/modify_userphone.html"
-
-
 
     def get_context_data(self, **kwargs):
         context = super(ModifyUserPhoneView, self).get_context_data(**kwargs)
@@ -149,20 +153,21 @@ class ModifyUserPhoneView(TemplateView):
         return context
         """
 
+    @method_decorator(login_required)
+    @method_decorator(permission_required("dashboard.change_profile", login_url=settings.PERMISSION_NONE_URL))
     def post(self, request):
         uid = request.POST.get('id', None)
         #  取出User对象
         user_obj = self.get_user_obj(uid)
 
-
         #  修改User.profile.phone的值
         try:
-            user_obj.profile.phone = request.POST.get('phone',None)
+            user_obj.profile.phone = request.POST.get('phone', None)
         except Exception as e:
             print(e)
-        #    保存User.profile模型
+        # 保存User.profile模型
         user_obj.profile.save()
-        return render(request,settings.TEMPLATE_JUMP,{"status": 0, "next_url": "/user/userlist/"})
+        return render(request, settings.TEMPLATE_JUMP, {"status": 0, "next_url": "/user/userlist/"})
 
     def get_user_obj(self, uid):
         try:
