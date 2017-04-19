@@ -60,9 +60,18 @@ class UserListView(ListView):
     before_index = 6
     after_index = 5
 
+    def get_queryset(self):
+        queryset = super(UserListView, self).get_queryset()
+        username = self.request.GET.get("username", "")
+        if username:
+            queryset = queryset.filter(username__contains=username)
+        return queryset
+
     def get_context_data(self, **kwargs):
         context = super(UserListView, self).get_context_data(**kwargs)
         context['page_range'] = self.get_page_range(context['page_obj'])
+        context["user"] = User.objects.all()
+        context.update(self.request.GET.dict())
         return context
 
     def get_page_range(self, page_obj):

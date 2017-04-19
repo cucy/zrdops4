@@ -1,6 +1,13 @@
 {% extends "public/layout.html" %}
 
 {% block body %}
+    <form class="form-inline" action="" method="get">
+    <div class="form-group">
+        <input type="text" name="username" value="{{ username }}" class="form-control" placeholder="请输入用户名">
+
+    </div>
+    <button type="submit" class="btn btn-primary"> 查询</button>
+    </form>
     <table class="table table-striped">
         <tr>
             <th>#</th>
