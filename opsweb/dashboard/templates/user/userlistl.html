@@ -51,11 +51,11 @@
                                 {# 如果有权限才能显示 perms固定写法 应用名dashboard  change_department codename#}
                                 {% if perms.dashboard.change_department %}
                                     <li role="presentation"><a role="menuitem" tabindex="-1"
-                                                               href="{% url 'dashboard:modifydepartment' %}?user={{ user.id }}">部门</a>
+                                                               href="{% url 'modifydepartment' %}?user={{ user.id }}">部门</a>
                                     </li>
                                 {% endif %}
                                 <li role="presentation"><a role="menuitem" tabindex="-1"
-                                                           {% if perms.dashboard.change_profile %}href="{% url 'dashboard:modify_user_phone' %}?uid={{ user.id }}"{% else %}href=""{% endif %}>手机</a>
+                                                           {% if perms.dashboard.change_profile %}href="{% url 'modify_user_phone' %}?uid={{ user.id }}"{% else %}href=""{% endif %}>手机</a>
                                 </li>
                                 <li role="presentation"><a role="menuitem" tabindex="-1" href="#"
                                                            data='{"uid":"{{ user.id }}"}'

@@ -13,6 +13,7 @@ import logging
 logger = logging.getLogger('opsweb')
 
 
+# 所有组列表
 class GroupListView(ListView):
     model = Group
     template_name = 'user/grouplist.html'
@@ -127,8 +128,7 @@ class UserGroupView(View):
         return JsonResponse(ret, safe=True)
 
 
-# 组权限管理视图
-
+# 组权限管理列表视图
 class GroupPermissionListViwe(TemplateView):
     template_name = 'user/group_permission_list.html'
 
@@ -169,3 +169,64 @@ class GroupPermissionListViwe(TemplateView):
                 # 给组赋予权限
                 group.permissions = permissions_obj
         return render(request, settings.TEMPLATE_JUMP, ret)
+
+
+# 查看单个组的权限
+# list view方法
+'''
+
+class GroupPermissionView(ListView):
+    template_name = "user/group_permission.html"
+    model = Permission
+    context_object_name = 'object_list'
+
+    """ 
+        重载父类方法，父类方法中默认返回models所有数据
+        if self.queryset is not None:
+            queryset = self.queryset
+            if isinstance(queryset, QuerySet):
+                queryset = queryset.all()
+        elif self.model is not None:
+            queryset = self.model._default_manager.all()
+            
+        传入返回数据（通过某一条object）
+    """
+    def get_queryset(self):
+        queryset = super(GroupPermissionView, self).get_queryset()
+        gid = self.request.GET.get("gid", 0)
+        try:
+            group = Group.objects.get(pk=gid)
+            permission = group.permissions.all()
+        except Group.DoesNotExist as e:
+            logger.error("所查id为 {0} 用户组不存在，{1}".format(gid, e.args))
+            raise Http404
+        queryset = queryset.filter(id__in=[p.id for p in permission])
+        return queryset
+'''
+
+
+# 查看单个组的权限
+# 使用template view方法
+class GroupPermissionView(TemplateView):
+    template_name = "user/group_permission.html"
+
+    def get_context_data(self, **kwargs):
+        context_data = super(GroupPermissionView, self).get_context_data(**kwargs)
+        gid = self.request.GET.get("gid", 0)
+        try:
+            group = Group.objects.get(pk=gid)
+            context_data["permissions"] = group.permissions.all()
+            context_data["gid"] = gid
+        except Group.DoesNotExist as e:
+            logger.error("所查id为 {0} 用户组不存在，{1}".format(gid, e.args))
+            raise Http404
+        return context_data
+
+    # 删除组中的某个权限
+    def post(self, request):
+        permission_id = request.POST.get('permissionid', 0)
+        g_id = request.POST.get('gid', 0)
+        print g_id
+        pass
+
+
