@@ -4,13 +4,12 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse, HttpResponse, Http404
 from django.contrib.auth.models import User
 from dashboard.models import Department
-
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required, permission_required
-
 from django.conf import settings
 
-import  logging
+import logging
+
 logger = logging.getLogger('opsweb')
 """
 from django.views.generic import TemplateView, View, ListView
@@ -53,6 +52,7 @@ class UserListView(TemplateView):
 """
 
 
+# 用户列表
 class UserListView(ListView):
     template_name = "user/userlistl.html"
     model = User
@@ -80,11 +80,17 @@ class UserListView(ListView):
             start_index = 0
         return page_obj.paginator.page_range[start_index: page_obj.number + self.after_index]
 
-
-class ModifyUserStatusView(View):
     @method_decorator(login_required)
-    @method_decorator(permission_required("auth.change_user", login_url=settings.PERMISSION_NONE_URL))
+    @method_decorator(permission_required("auth.list_user", login_url=settings.PERMISSION_NONE_URL))
+    def get(self, request, *args, **kwargs):
+        return super(UserListView, self).get(request, *args, **kwargs)
+
+
+# 修改用户状态
+class ModifyUserStatusView(View):
     def post(self, request):
+        if not request.user.has_perm('auth.change_user'):
+            return HttpResponse('Forbidden')
         ret = {"status": 0}
 
         user_id = request.POST.get('user_id', None)
@@ -101,6 +107,7 @@ class ModifyUserStatusView(View):
         return JsonResponse(ret, safe=True)
 
 
+# 修改用户所属部门
 class ModifyDepartmentView(TemplateView):
     template_name = "user/modify_department.html"
 
@@ -108,12 +115,17 @@ class ModifyDepartmentView(TemplateView):
         context = super(ModifyDepartmentView, self).get_context_data(**kwargs)
         context['user_obj'] = get_object_or_404(User, pk=self.request.GET.get('user', None))
         context['departments'] = Department.objects.all()
-
         return context
 
     @method_decorator(login_required)
-    @method_decorator(permission_required("dashboard.change_department", login_url=settings.PERMISSION_NONE_URL))
+    @method_decorator(permission_required("dashboard.list_department", login_url=settings.PERMISSION_NONE_URL))
+    def get(self, request, *args, **kwargs):
+        self.request = request
+        return super(ModifyDepartmentView, self).get(request, *args, **kwargs)
+
     def post(self, request):
+        if not request.user.has_perm('dashboard.change_department'):
+            return HttpResponse('Forbidden')
         user_id = request.POST.get('id', None)
         department_id = request.POST.get('department', None)
         if not user_id or not department_id:
@@ -135,13 +147,8 @@ class ModifyDepartmentView(TemplateView):
             user_obj.profile.save()
         return redirect("/user/userlist/")
 
-    @method_decorator(login_required)
-    @method_decorator(permission_required("dashboard.change_department", login_url=settings.PERMISSION_NONE_URL))
-    def get(self, request, *args, **kwargs):
-        self.request = request
-        return super(ModifyDepartmentView, self).get(request, *args, **kwargs)
 
-
+# 修改用户手机号码
 class ModifyUserPhoneView(TemplateView):
     template_name = "user/modify_userphone.html"
 
@@ -162,9 +169,14 @@ class ModifyUserPhoneView(TemplateView):
         return context
         """
 
-    @method_decorator(login_required)
-    @method_decorator(permission_required("dashboard.change_profile", login_url=settings.PERMISSION_NONE_URL))
+        @method_decorator(login_required)
+        @method_decorator(permission_required("dashboard.list_profile", login_url=settings.PERMISSION_NONE_URL))
+        def get(self, request, *args, **kwargs):
+            return super(ModifyUserPhoneView, self).get(request, *args, **kwargs)
+
     def post(self, request):
+        if not request.user.has_perm('dashboard.change_profile'):
+            return HttpResponse('Forbidden')
         uid = request.POST.get('id', None)
         #  取出User对象
         user_obj = self.get_user_obj(uid)

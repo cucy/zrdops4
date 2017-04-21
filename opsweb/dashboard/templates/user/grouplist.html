@@ -2,11 +2,12 @@
 
 {% block body %}
     <table class="table table-striped">
+
+    {% if perms.auth.add_group %}
         <caption>
-             {% if perms.auth.add_group %}
-            <button id="add_group" class="btn btn-primary" type="button">添加组</button>
-            {% endif %}
+                <button id="add_group" class="btn btn-primary" type="button">添加组</button>
         </caption>
+     {% endif %}
         <tr>
             <th>用户组</th>
             <th>操作</th>
@@ -16,11 +17,22 @@
             <tr>
                 <td>{{ group.name }}</td>
                 <td>
-                    {% if perms.auth.delete_group %}
-                           <button class="btn btn-primary btn-sm show_group_users" data='{"gid": "{{ group.id }}", "groupname": "{{ group.name }}"}'>成员列表</button>
+
+                    {% if perms.auth.list_group %}
+                        <button class="btn btn-primary btn-sm show_group_users"
+                                data='{"gid": "{{ group.id }}", "groupname": "{{ group.name }}"}'>成员列表
+                        </button>
                     {% endif %}
-                    <a class="btn btn-warning btn-primary btn-sm show_group_users"  {% if perms.auth.delete_group %}href="{% url 'one_group_permission'   %}?gid={{ group.id }}"{%  else %}href=""{% endif %}>查看权限</a>
-                                    <a class="btn btn-danger btn-primary btn-sm show_group_users"  {% if perms.auth.delete_group %}href="{% url 'group_permissions'   %}?gid={{ group.id }}"{%  else %}href=""{% endif %}>修改权限</a>
+                    {% if perms.auth.list_group %}
+                    <a class="btn btn-warning btn-primary btn-sm show_group_users"
+                       href="{% url 'one_group_permission' %}?gid={{ group.id }}"
+                    >查看权限</a>
+                    {% endif %}
+                {% if perms.auth.list_group %}
+                    <a class="btn btn-danger btn-primary btn-sm show_group_users"
+                       href="{% url 'group_permissions' %}?gid={{ group.id }}"
+                       >修改权限</a>
+                {% endif %}
 
                 </td>
 
@@ -32,10 +44,13 @@
         <div class="modal-dialog">
             <div class="modal-content">
 
+                {% if perms.auth.add_group %}
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">×</button>
                     <h4>添加group</h4>
                 </div>
+                {% endif %}
+
                 <div class="modal-body form-inline">
                     <div class="form-group">
                         <label for="exampleInputName2">用户组：</label>
@@ -51,8 +66,8 @@
         </div>
     </div>
 
-{#    模态框 查看组内成员S #}
-        <div class="modal fade" id="modal_show_group_users_list" aria-hidden="true">
+    {#    模态框 查看组内成员S #}
+    <div class="modal fade" id="modal_show_group_users_list" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
 
@@ -69,7 +84,7 @@
             </div>
         </div>
     </div>
-{#    模态框 查看组内成员E#}
+    {#    模态框 查看组内成员E#}
 
 
 {% endblock %}
@@ -113,40 +128,39 @@
             });
 
 
-
-    // 查看组内成员
-         $(".show_group_users").click(function(){
+            // 查看组内成员
+            $(".show_group_users").click(function () {
                 var data = JSON.parse($(this).attr('data'));
                 var groupid = data.gid;
-                $.get("/group/usergroup/", {"gid": groupid},function(res){
+                $.get("/group/usergroup/", {"gid": groupid}, function (res) {
                     var html = '<table class="table table-striped">';
-                    $.each(res, function(n, obj){
+                    $.each(res, function (n, obj) {
                         html += '<tr>';
-                        html += '<td>'+obj.name+'</td>';
-                        html += '<td>'+obj.username+'</td>';
-                        html += '<td>'+obj.email+'</td>';
-                        html += '<td><button class="btn btn-danger btn-xs del_group_user" data="'+obj.id+'">删除</button></td>';
+                        html += '<td>' + obj.name + '</td>';
+                        html += '<td>' + obj.username + '</td>';
+                        html += '<td>' + obj.email + '</td>';
+                        html += '<td><button class="btn btn-danger btn-xs del_group_user" data="' + obj.id + '">删除</button></td>';
                         html += '</tr>'
                     });
                     html += '</table>';
                     $("#modal_show_group_users_list_title").html(data.groupname);
                     $("#modal_show_group_users_content_list").html(html);
                     $("#modal_show_group_users_list").modal("show");
-                    
+
                     // 用组列表中删除用户
-                    $(".del_group_user").click(function(){
+                    $(".del_group_user").click(function () {
                         var click_obj = $(this);
                         var userid = click_obj.attr('data');
                         $.ajax({
-                            url:"/group/usergroup/",
+                            url: "/group/usergroup/",
                             type: "DELETE",
                             data: {"groupid": groupid, "userid": userid},
                             datatype: "json",
-                            success: function(res){
-                                if (res.status == 0){
+                            success: function (res) {
+                                if (res.status == 0) {
                                     click_obj.parents("tr").remove();
                                     swal("操作成功", "", "success")
-                                }else{
+                                } else {
                                     swal("操作失败", res.errmsg, "error")
                                 }
                             }
@@ -157,7 +171,7 @@
 
             })
 
-       })
+        })
     </script>
 
 {% endblock %}

@@ -51,24 +51,24 @@
     <div class="panel-default">
         <center>
             <ul class="pagination">
-                <li><a href="/user/userlist/?page=1">首页</a></li>
+                <li><a href="{% url 'user_list' %}?page=1">首页</a></li>
                     {% if page_obj.has_previous %}
-                    <li><a href="/user/userlist/?page={{ page_obj.previous_page_number }}">上一页</a></li>
+                    <li><a href="{% url 'user_list' %}?page={{ page_obj.previous_page_number }}">上一页</a></li>
                     {% else %}
                         <li class="disabled"><a href="#">上一页</a></li>
                     {% endif %}
 
                     {#  {% for p in page_obj.paginator.page_range %} #}
                     {% for p in page_range %}
-                        <li {% if page_obj.number == p %} class="active" {% endif %}><a href="/user/userlist/?page={{ p }}">{{ p }}</a></li>
+                        <li {% if page_obj.number == p %} class="active" {% endif %}><a href="{% url 'user_list' %}?page={{ p }}">{{ p }}</a></li>
                     {% endfor %}
 
                     {% if page_obj.has_next %}
-                        <li><a href="/user/userlist/?page={{ page_obj.next_page_number }}">下一页</a></li>
+                        <li><a href="{% url 'user_list' %}?page={{ page_obj.next_page_number }}">下一页</a></li>
                     {% else %}
                         <li class="disabled"><a href="#">下一页</a></li>
                     {% endif %}
-                <li><a href="/user/userlist/?page={{ page_obj.paginator.num_pages }}">末页</a></li>
+                <li><a href="{% url 'user_list' %}?page={{ page_obj.paginator.num_pages }}">末页</a></li>
             </ul>
         </center>
     </div>
@@ -84,7 +84,7 @@
         }
     }
     function modify_user_status(user_id){
-        $.post("/user/modifystatus/", {"user_id": user_id}, function(res){
+        $.post("{% url 'modify_user_status' %}", {"user_id": user_id}, function(res){
             if (res.status != 0){
                 swal({
                     title: res.errmsg,

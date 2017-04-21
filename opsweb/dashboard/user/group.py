@@ -18,9 +18,9 @@ class GroupListView(ListView):
     model = Group
     template_name = 'user/grouplist.html'
 
-    @method_decorator(login_required)
-    @method_decorator(permission_required("auth.add_group", login_url=settings.PERMISSION_NONE_URL))
     def post(self, request):
+        if not request.user.has_perm("auth.add_group"):
+            return HttpResponse('Forbidden')
         ret = {'status': 0}
         name = request.POST.get('name', '')
         if name:
@@ -38,6 +38,7 @@ class GroupListView(ListView):
 # 获取用户组信息
 class GroupView(View):
     @method_decorator(login_required)
+    @method_decorator(permission_required("auth.list_group", login_url=settings.PERMISSION_NONE_URL))
     def get(self, request):
         uid = request.GET.get('uid', '')
         ret = {'status': 0}
@@ -51,13 +52,14 @@ class GroupView(View):
         return HttpResponse(serializers.serialize("json", groups), content_type="application/json")
 
 
-# 将用户添加到指定组
+# 将用户添加到指定组((用户列表中 添加到组 显示下拉框内容))
 class UserGroupView(View):
     ''' 
         显示组下所有的用户列表 
     '''
 
     @method_decorator(login_required)
+    @method_decorator(permission_required("auth.list_group", login_url=settings.PERMISSION_NONE_URL))
     def get(self, request):
         gid = request.GET.get('gid', None)
         try:
@@ -74,9 +76,9 @@ class UserGroupView(View):
         将用户添加到指定组
     """
 
-    @method_decorator(login_required)
-    @method_decorator(permission_required("auth.add_group", login_url=settings.PERMISSION_NONE_URL))
     def post(self, request):
+        if not request.user.has_perm('auth.add_group'):
+            return HttpResponse('Forbidden')
         ret = {"status": 0}
         uid = request.POST.get('uid', None)
         gid = request.POST.get('gid', None)
@@ -106,8 +108,9 @@ class UserGroupView(View):
         将用户从组中删除
     '''
 
-    @method_decorator(login_required)
     def delete(self, request):
+        if not request.user.has_perm('auth.delete_group'):
+            return HttpResponse('Forbidden')
         ret = {"status": 0}
         data = QueryDict(request.body)
         uid = data.get('userid', None)
@@ -151,8 +154,14 @@ class GroupPermissionListViwe(TemplateView):
             return Http404
 
     @method_decorator(login_required)
-    @method_decorator(permission_required("auth.change_group", login_url=settings.PERMISSION_NONE_URL))
+    @method_decorator(permission_required("auth.list_group", login_url=settings.PERMISSION_NONE_URL))
+    def get(self, request, *args, **kwargs):
+        return super(GroupPermissionListViwe, self).get(request, *args, **kwargs)
+
+
     def post(self, request):
+        if not request.user.has_perm("auth.change_group"):
+            return HttpResponse('Forbidden')
         permission_id_list = request.POST.getlist('permission', [])
         groupid = request.POST.get('group', '')
         ret = {"status": 0, "next_url": "/group/list/"}
@@ -222,11 +231,17 @@ class GroupPermissionView(TemplateView):
             raise Http404
         return context_data
 
-    # 删除组中的某个权限
+    @method_decorator(login_required)
+    @method_decorator(permission_required("auth.list_group", login_url=settings.PERMISSION_NONE_URL))
+    def get(self, request, *args, **kwargs):
+        return super(GroupPermissionView, self).get(request, *args, **kwargs)
+
+    # 删除组中的某个权限\
+    """ 
     def post(self, request):
         permission_id = request.POST.get('permissionid', 0)
         g_id = request.POST.get('gid', 0)
         print g_id
         pass
 
-
+    """

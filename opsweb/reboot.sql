@@ -29,7 +29,7 @@ CREATE TABLE `auth_group` (
   `name` varchar(80) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -38,7 +38,7 @@ CREATE TABLE `auth_group` (
 
 LOCK TABLES `auth_group` WRITE;
 /*!40000 ALTER TABLE `auth_group` DISABLE KEYS */;
-INSERT INTO `auth_group` VALUES (1,'dddd'),(2,'test'),(6,'市场'),(8,'研发'),(7,'运维');
+INSERT INTO `auth_group` VALUES (1,'dddd'),(2,'test'),(6,'市场'),(9,'测试'),(8,'研发'),(7,'运维');
 /*!40000 ALTER TABLE `auth_group` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -58,7 +58,7 @@ CREATE TABLE `auth_group_permissions` (
   KEY `auth_group_permissi_permission_id_23962d04_fk_auth_permission_id` (`permission_id`),
   CONSTRAINT `auth_group_permissi_permission_id_23962d04_fk_auth_permission_id` FOREIGN KEY (`permission_id`) REFERENCES `auth_permission` (`id`),
   CONSTRAINT `auth_group_permissions_group_id_58c48ba9_fk_auth_group_id` FOREIGN KEY (`group_id`) REFERENCES `auth_group` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=96 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=177 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -67,7 +67,7 @@ CREATE TABLE `auth_group_permissions` (
 
 LOCK TABLES `auth_group_permissions` WRITE;
 /*!40000 ALTER TABLE `auth_group_permissions` DISABLE KEYS */;
-INSERT INTO `auth_group_permissions` VALUES (58,1,19),(59,1,20),(60,1,21),(61,1,22),(62,1,23),(63,1,24),(64,1,25),(65,1,26),(66,1,27),(67,1,28),(41,6,14),(42,6,15),(68,7,1),(69,7,2),(70,7,3),(71,7,4),(72,7,5),(73,7,6),(74,7,7),(75,7,8),(76,7,9),(77,7,10),(78,7,11),(79,7,12),(80,7,13),(81,7,14),(82,7,15),(83,7,16),(84,7,17),(85,7,18),(86,7,19),(87,7,20),(88,7,21),(89,7,22),(90,7,23),(91,7,24),(92,7,25),(93,7,26),(94,7,27),(95,7,28);
+INSERT INTO `auth_group_permissions` VALUES (58,1,19),(59,1,20),(60,1,21),(61,1,22),(62,1,23),(63,1,24),(64,1,25),(65,1,26),(66,1,27),(67,1,28),(101,2,7),(100,2,8),(96,6,1),(97,6,2),(98,6,14),(99,6,15),(153,7,1),(154,7,2),(155,7,3),(156,7,4),(157,7,5),(158,7,6),(159,7,7),(160,7,8),(161,7,9),(162,7,10),(163,7,11),(164,7,12),(165,7,13),(166,7,14),(167,7,15),(168,7,19),(169,7,20),(170,7,22),(171,7,23),(172,7,24),(173,7,25),(174,7,26),(175,7,27),(176,7,28);
 /*!40000 ALTER TABLE `auth_group_permissions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -86,7 +86,7 @@ CREATE TABLE `auth_permission` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `content_type_id` (`content_type_id`,`codename`),
   CONSTRAINT `auth_permissi_content_type_id_51277a81_fk_django_content_type_id` FOREIGN KEY (`content_type_id`) REFERENCES `django_content_type` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -95,7 +95,7 @@ CREATE TABLE `auth_permission` (
 
 LOCK TABLES `auth_permission` WRITE;
 /*!40000 ALTER TABLE `auth_permission` DISABLE KEYS */;
-INSERT INTO `auth_permission` VALUES (1,'Can add log entry',1,'add_logentry'),(2,'Can change log entry',1,'change_logentry'),(3,'Can delete log entry',1,'delete_logentry'),(4,'Can add permission',2,'add_permission'),(5,'Can change permission',2,'change_permission'),(6,'Can delete permission',2,'delete_permission'),(7,'Can add group',3,'add_group'),(8,'Can change group',3,'change_group'),(9,'Can delete group',3,'delete_group'),(10,'Can add user',4,'add_user'),(11,'Can change user',4,'change_user'),(12,'Can delete user',4,'delete_user'),(13,'Can add content type',5,'add_contenttype'),(14,'Can change content type',5,'change_contenttype'),(15,'Can delete content type',5,'delete_contenttype'),(16,'Can add session',6,'add_session'),(17,'Can change session',6,'change_session'),(18,'Can delete session',6,'delete_session'),(19,'Can add server',7,'add_server'),(20,'Can change server',7,'change_server'),(21,'Can delete server',7,'delete_server'),(22,'Can add department',8,'add_department'),(23,'Can change department',8,'change_department'),(24,'Can delete department',8,'delete_department'),(25,'Can add profile',9,'add_profile'),(26,'Can change profile',9,'change_profile'),(27,'Can delete profile',9,'delete_profile'),(28,'访问服务服务器信息',7,'view_server');
+INSERT INTO `auth_permission` VALUES (1,'Can add log entry',1,'add_logentry'),(2,'Can change log entry',1,'change_logentry'),(3,'Can delete log entry',1,'delete_logentry'),(4,'Can add permission',2,'add_permission'),(5,'Can change permission',2,'change_permission'),(6,'Can delete permission',2,'delete_permission'),(7,'Can add group',3,'add_group'),(8,'Can change group',3,'change_group'),(9,'Can delete group',3,'delete_group'),(10,'Can add user',4,'add_user'),(11,'Can change user',4,'change_user'),(12,'Can delete user',4,'delete_user'),(13,'Can add content type',5,'add_contenttype'),(14,'Can change content type',5,'change_contenttype'),(15,'Can delete content type',5,'delete_contenttype'),(16,'Can add session',6,'add_session'),(17,'Can change session',6,'change_session'),(18,'Can delete session',6,'delete_session'),(19,'Can add server',7,'add_server'),(20,'Can change server',7,'change_server'),(21,'Can delete server',7,'delete_server'),(22,'Can add department',8,'add_department'),(23,'Can change department',8,'change_department'),(24,'Can delete department',8,'delete_department'),(25,'Can add profile',9,'add_profile'),(26,'Can change profile',9,'change_profile'),(27,'Can delete profile',9,'delete_profile'),(28,'访问服务服务器信息',7,'view_server'),(29,'查看组',3,'list_group'),(30,'查看用户',4,'list_user'),(31,'查看department',8,'list_department'),(32,'查看profile',9,'list_profile');
 /*!40000 ALTER TABLE `auth_permission` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -129,7 +129,7 @@ CREATE TABLE `auth_user` (
 
 LOCK TABLES `auth_user` WRITE;
 /*!40000 ALTER TABLE `auth_user` DISABLE KEYS */;
-INSERT INTO `auth_user` VALUES (1,'pbkdf2_sha256$20000$O8V84ZNJgy6O$K4tXw42EWaTJvI0C3G6KqCoyEPtsYJ6/ZP1CrtuJ6Jo=','2017-04-15 07:42:58',1,'admin','','','admin@qq.com',1,1,'2017-04-09 02:21:38'),(2,'pbkdf2_sha256$20000$q75IwSiI1OEv$3HR91pLpVjbUQvXOx9eG9CvaMO/E7LFi0wqh3vFCl9Y=',NULL,0,'123','','','',0,1,'2017-04-09 05:39:12'),(3,'pbkdf2_sha256$20000$fzp0VmMqCaIE$Avqkfx94Hu3a7oek2Ax59b0LVYCX0ICmISp4Zk6JAbw=','2017-04-15 07:45:49',0,'aa','WWW','AAA','22@qq.com',0,1,'2017-04-15 07:43:19'),(4,'pbkdf2_sha256$20000$KjR255p2Qzy2$U3MLKKECPiaU9nfviAQVZxbi+OerkiebkOpbGMTGeXA=',NULL,0,'abc','','','',0,1,'2017-04-15 09:14:13');
+INSERT INTO `auth_user` VALUES (1,'pbkdf2_sha256$20000$O8V84ZNJgy6O$K4tXw42EWaTJvI0C3G6KqCoyEPtsYJ6/ZP1CrtuJ6Jo=','2017-04-21 07:20:54',1,'admin','','','admin@qq.com',1,1,'2017-04-09 02:21:38'),(2,'pbkdf2_sha256$20000$q75IwSiI1OEv$3HR91pLpVjbUQvXOx9eG9CvaMO/E7LFi0wqh3vFCl9Y=',NULL,0,'123','','','',0,1,'2017-04-09 05:39:12'),(3,'pbkdf2_sha256$20000$fzp0VmMqCaIE$Avqkfx94Hu3a7oek2Ax59b0LVYCX0ICmISp4Zk6JAbw=','2017-04-15 07:45:49',0,'aa','WWW','AAA','22@qq.com',0,1,'2017-04-15 07:43:19'),(4,'pbkdf2_sha256$20000$1JMYB1ST8xqF$N4HtKRR58U91hKoF+s34fMFY+K9H6CVviwwOoZKuYhE=','2017-04-21 07:27:31',0,'abc','','','',0,1,'2017-04-15 09:14:13');
 /*!40000 ALTER TABLE `auth_user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -149,7 +149,7 @@ CREATE TABLE `auth_user_groups` (
   KEY `auth_user_groups_group_id_30a071c9_fk_auth_group_id` (`group_id`),
   CONSTRAINT `auth_user_groups_group_id_30a071c9_fk_auth_group_id` FOREIGN KEY (`group_id`) REFERENCES `auth_group` (`id`),
   CONSTRAINT `auth_user_groups_user_id_24702650_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -158,7 +158,7 @@ CREATE TABLE `auth_user_groups` (
 
 LOCK TABLES `auth_user_groups` WRITE;
 /*!40000 ALTER TABLE `auth_user_groups` DISABLE KEYS */;
-INSERT INTO `auth_user_groups` VALUES (1,1,1),(6,1,6),(7,1,7),(10,2,2);
+INSERT INTO `auth_user_groups` VALUES (11,1,1),(14,1,2),(6,1,6),(20,1,8),(10,2,2),(12,2,8),(21,2,9),(24,4,8);
 /*!40000 ALTER TABLE `auth_user_groups` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -178,7 +178,7 @@ CREATE TABLE `auth_user_user_permissions` (
   KEY `auth_user_user_perm_permission_id_3d7071f0_fk_auth_permission_id` (`permission_id`),
   CONSTRAINT `auth_user_user_perm_permission_id_3d7071f0_fk_auth_permission_id` FOREIGN KEY (`permission_id`) REFERENCES `auth_permission` (`id`),
   CONSTRAINT `auth_user_user_permissions_user_id_7cd7acb6_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -187,6 +187,7 @@ CREATE TABLE `auth_user_user_permissions` (
 
 LOCK TABLES `auth_user_user_permissions` WRITE;
 /*!40000 ALTER TABLE `auth_user_user_permissions` DISABLE KEYS */;
+INSERT INTO `auth_user_user_permissions` VALUES (40,4,29),(41,4,30),(42,4,31),(39,4,32);
 /*!40000 ALTER TABLE `auth_user_user_permissions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -235,7 +236,7 @@ CREATE TABLE `django_admin_log` (
   KEY `django_admin_log_user_id_1c5f563_fk_auth_user_id` (`user_id`),
   CONSTRAINT `django_admin__content_type_id_5151027a_fk_django_content_type_id` FOREIGN KEY (`content_type_id`) REFERENCES `django_content_type` (`id`),
   CONSTRAINT `django_admin_log_user_id_1c5f563_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -244,7 +245,7 @@ CREATE TABLE `django_admin_log` (
 
 LOCK TABLES `django_admin_log` WRITE;
 /*!40000 ALTER TABLE `django_admin_log` DISABLE KEYS */;
-INSERT INTO `django_admin_log` VALUES (1,'2017-04-09 05:39:12','2','123',1,'',4,1),(2,'2017-04-15 07:43:19','3','aa',1,'',4,1),(3,'2017-04-15 07:44:22','3','aa',2,'Changed first_name, last_name, email and last_login.',4,1),(4,'2017-04-15 09:14:13','4','abc',1,'',4,1);
+INSERT INTO `django_admin_log` VALUES (1,'2017-04-09 05:39:12','2','123',1,'',4,1),(2,'2017-04-15 07:43:19','3','aa',1,'',4,1),(3,'2017-04-15 07:44:22','3','aa',2,'Changed first_name, last_name, email and last_login.',4,1),(4,'2017-04-15 09:14:13','4','abc',1,'',4,1),(5,'2017-04-21 04:42:38','4','abc',2,'Changed password.',4,1),(6,'2017-04-21 05:13:38','4','abc',2,'Changed groups.',4,1),(7,'2017-04-21 05:26:21','4','abc',2,'Changed user_permissions.',4,1),(8,'2017-04-21 06:05:31','4','abc',2,'Changed user_permissions.',4,1),(9,'2017-04-21 06:48:48','4','abc',2,'Changed user_permissions.',4,1),(10,'2017-04-21 06:53:22','4','abc',2,'Changed user_permissions.',4,1),(11,'2017-04-21 07:00:33','4','abc',2,'Changed user_permissions and last_login.',4,1),(12,'2017-04-21 07:02:21','4','abc',2,'Changed user_permissions.',4,1),(13,'2017-04-21 07:10:54','4','abc',2,'Changed user_permissions.',4,1),(14,'2017-04-21 07:21:09','4','abc',2,'Changed user_permissions.',4,1),(15,'2017-04-21 07:23:54','4','abc',2,'Changed user_permissions.',4,1);
 /*!40000 ALTER TABLE `django_admin_log` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -322,7 +323,7 @@ CREATE TABLE `django_session` (
 
 LOCK TABLES `django_session` WRITE;
 /*!40000 ALTER TABLE `django_session` DISABLE KEYS */;
-INSERT INTO `django_session` VALUES ('3tvzcf7bq3ozxri1eftfiv0dh930x64p','OWEyZDhiNmQwYzc1ZjZiZjA0NDhjMDQ2ODJhMmVlMGI3ODA5NzU5MDp7Il9hdXRoX3VzZXJfaGFzaCI6IjBlYzJiNjBjODE1YTY3ZWI0NDU2MDBkNmJkM2FiYWE4MTMzYzcyOGIiLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaWQiOiIzIn0=','2017-04-29 07:44:33'),('ilbykylwzaq2btcteau0vz02vythor83','OWViMDhjZTI4YzRmN2FlZjM4OGQ1MGIyYzk3NGRiYjkyMDk4NmFiMDp7Il9hdXRoX3VzZXJfaGFzaCI6IjE5OTJhNTc3MTRhNDBiMjcyZDZjYWQzZTA0ZTdhM2UwMWRiNmJkM2QiLCJfYXV0aF91c2VyX2lkIjoiMSIsIl9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIn0=','2017-04-28 14:54:36'),('l90l54ku49la3jqlw2425dy3a28onbvb','NjIxMmFiZGU4YTljNjBkYjY3ZmY5MzdjMTBhZGE3YzRlZTFiODM2Zjp7Il9hdXRoX3VzZXJfaGFzaCI6IjE5OTJhNTc3MTRhNDBiMjcyZDZjYWQzZTA0ZTdhM2UwMWRiNmJkM2QiLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaWQiOiIxIn0=','2017-04-29 07:38:24'),('q23k0c14v1u0vxl8u3rl7p9r0g78uo8m','OWEyZDhiNmQwYzc1ZjZiZjA0NDhjMDQ2ODJhMmVlMGI3ODA5NzU5MDp7Il9hdXRoX3VzZXJfaGFzaCI6IjBlYzJiNjBjODE1YTY3ZWI0NDU2MDBkNmJkM2FiYWE4MTMzYzcyOGIiLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaWQiOiIzIn0=','2017-04-29 07:45:49');
+INSERT INTO `django_session` VALUES ('eybk4paw816kd85ovuayb526apd6qvei','NjIxMmFiZGU4YTljNjBkYjY3ZmY5MzdjMTBhZGE3YzRlZTFiODM2Zjp7Il9hdXRoX3VzZXJfaGFzaCI6IjE5OTJhNTc3MTRhNDBiMjcyZDZjYWQzZTA0ZTdhM2UwMWRiNmJkM2QiLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaWQiOiIxIn0=','2017-05-05 07:20:54');
 /*!40000 ALTER TABLE `django_session` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -405,4 +406,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-04-15 17:35:12
+-- Dump completed on 2017-04-21 15:31:39

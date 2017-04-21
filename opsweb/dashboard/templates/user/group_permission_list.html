@@ -12,7 +12,7 @@
 {% endblock %}
 {% block body %}
     <dl class="dl-horizontal">
-    {% if perms.auth.change_group and perms.auth.delete_group %}
+
         <form action="" role="form" class="form-horizontal" method="post">
             {% for ct in content_type %}
                 <dt class="permission-content">{{ ct.app_label }} ===>> {{ ct.model }}:</dt>
@@ -29,15 +29,19 @@
                 </dd>
 
             {% endfor %}
-        <div class="form-group form-footer">
-            <div class="col-sm-offset-3 col-sm-8">
+            {% if perms.auth.change_group and perms.auth.delete_group %}
+                <div class="form-group form-footer">
+                    <div class="col-sm-offset-3 col-sm-8">
                         {# 隐藏上传gid #}
-                    <input type="hidden" name="group" value="{{ group }}">
-                    <input type="submit" class="btn btn-primary" value="修改">
-                    <input type="reset" class="btn btn-warning" value="重置">
+
+                        <input type="hidden" name="group" value="{{ group }}">
+                        <input type="submit" class="btn btn-primary" value="修改">
+                        <input type="reset" class="btn btn-warning" value="重置">
+                    </div>
+
                 </div>
-        </div>
+            {% endif %}
         </form>
-    {% endif %}
+
     </dl>
 {% endblock %}

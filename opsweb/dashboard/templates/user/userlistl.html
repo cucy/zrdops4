@@ -2,11 +2,11 @@
 
 {% block body %}
     <form class="form-inline" action="" method="get">
-    <div class="form-group">
-        <input type="text" name="username" value="{{ username }}" class="form-control" placeholder="请输入用户名">
+        <div class="form-group">
+            <input type="text" name="username" value="{{ username }}" class="form-control" placeholder="请输入用户名">
 
-    </div>
-    <button type="submit" class="btn btn-primary"> 查询</button>
+        </div>
+        <button type="submit" class="btn btn-primary"> 查询</button>
     </form>
     <table class="table table-striped">
         <tr>
@@ -58,28 +58,33 @@
                                 {# 如果有权限才能显示 perms固定写法 应用名dashboard  change_department codename#}
                                 {% if perms.dashboard.change_department %}
                                     <li role="presentation"><a role="menuitem" tabindex="-1"
-                                                               href="{% url 'modifydepartment' %}?user={{ user.id }}">部门</a>
+                                           href="{% url 'modifydepartment' %}?user={{ user.id }}">部门</a>
                                     </li>
                                 {% endif %}
+                                {% if perms.dashboard.change_profile %}
                                 <li role="presentation"><a role="menuitem" tabindex="-1"
-                                                           {% if perms.dashboard.change_profile %}href="{% url 'modify_user_phone' %}?uid={{ user.id }}"{% else %}href=""{% endif %}>手机</a>
+                                                           href="{% url 'modify_user_phone' %}?uid={{ user.id }}"
+                                                           >手机</a>
                                 </li>
-                                <li role="presentation"><a role="menuitem" tabindex="-1" href="#"
-                                                           data='{"uid":"{{ user.id }}"}'
-                                                           class="user_to_group">添加指定组</a></li>
+                                {% endif %}
+                                {% if perms.auth.add_group %}
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#"
+                                                               data='{"uid":"{{ user.id }}"}'
+                                                               class="user_to_group">添加指定组</a></li>
+                                {% endif %}
                             </ul>
                         </div>
-                    {% if perms.auth.change_user %}
-                                {% if user.is_active %}
-                            <button type="button" class="btn btn-sm btn-warning modify_user_status" status="true"
-                                    data="{{ user.id }}">禁用
-                            </button>
-                        {% else %}
-                            <button type="button" class="btn btn-sm modify_user_status btn-info" status="false"
-                                    data="{{ user.id }}">开启
-                            </button>
+                        {% if perms.auth.change_user %}
+                            {% if user.is_active %}
+                                <button type="button" class="btn btn-sm btn-warning modify_user_status" status="true"
+                                        data="{{ user.id }}">禁用
+                                </button>
+                            {% else %}
+                                <button type="button" class="btn btn-sm modify_user_status btn-info" status="false"
+                                        data="{{ user.id }}">开启
+                                </button>
+                            {% endif %}
                         {% endif %}
-                    {% endif %}
 
                     </div>
                 </td>
@@ -90,9 +95,9 @@
     <div class="panel-default">
         <center>
             <ul class="pagination">
-                <li><a href="/user/userlist/?page=1">首页</a></li>
+                <li><a href="{% url 'user_list' %}?page=1">首页</a></li>
                 {% if page_obj.has_previous %}
-                    <li><a href="/user/userlist/?page={{ page_obj.previous_page_number }}">上一页</a></li>
+                    <li><a href="{% url 'user_list' %}?page={{ page_obj.previous_page_number }}">上一页</a></li>
                 {% else %}
                     <li class="disabled"><a href="#">上一页</a></li>
                 {% endif %}
@@ -100,15 +105,15 @@
                 {# {% for p in page_obj.paginator.page_range %} #}
                 {% for p in page_range %}
                     <li {% if page_obj.number == p %} class="active" {% endif %}><a
-                            href="/user/userlist/?page={{ p }}">{{ p }}</a></li>
+                            href="{% url 'user_list' %}?page={{ p }}">{{ p }}</a></li>
                 {% endfor %}
 
                 {% if page_obj.has_next %}
-                    <li><a href="/user/userlist/?page={{ page_obj.next_page_number }}">下一页</a></li>
+                    <li><a href="{% url 'user_list' %}?page={{ page_obj.next_page_number }}">下一页</a></li>
                 {% else %}
                     <li class="disabled"><a href="#">下一页</a></li>
                 {% endif %}
-                <li><a href="/user/userlist/?page={{ page_obj.paginator.num_pages }}">末页</a></li>
+                <li><a href="{% url 'user_list' %}?page={{ page_obj.paginator.num_pages }}">末页</a></li>
             </ul>
         </center>
     </div>
@@ -150,7 +155,7 @@
             }
         }
         function modify_user_status(user_id) {
-            $.post("/user/modifystatus/", {"user_id": user_id}, function (res) {
+            $.post("{% url 'modify_user_status' %}", {"user_id": user_id}, function (res) {
                 if (res.status != 0) {
                     swal({
                         title: res.errmsg,
@@ -185,7 +190,7 @@
                 user_to_group_modal.modal("show");
                 var data = JSON.parse($(this).attr('data'));
                 uid = data.uid;
-                $.get("/group/", {"uid": uid}, function (res) {
+                $.get("{% url 'group' %}", {"uid": uid}, function (res) {
                     html = '<option value="0">请选择用户组</option>';
 
                     $.each(res, function (n, obj) {
@@ -200,7 +205,7 @@
             // 将用户添加到指定用户组
             $("#user_to_group_btn").click(function () {
 
-                var url = "/group/usergroup/";
+                var url = "{%  url 'usergroup' %}";
                 var gid = all_user_group.val();
                 user_to_group_modal.modal("hide");
                 $.post(url, {"uid": uid, "gid": gid}, function (res) {
