@@ -1,0 +1,2 @@
+# 通过user关联profile 在通过profile去查找部门name
+解决方法创建多个用户切关联id和userid一致
