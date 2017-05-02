@@ -61,6 +61,7 @@ class UserListView(ListView):
     after_index = 5
 
     def get_queryset(self):
+        """ 搜索功能 模糊匹配 """
         queryset = super(UserListView, self).get_queryset()
         username = self.request.GET.get("username", "")
         if username:

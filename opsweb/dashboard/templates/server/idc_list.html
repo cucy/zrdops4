@@ -1,0 +1,122 @@
+{% extends "public/layout.html" %}
+
+{% block body %}
+    <table class="table table-striped">
+
+        {% if perms.auth.add_idc %}
+            <caption>
+                <a id="add_idc" class="btn btn-primary" type="button" href="{% url 'add_idc' %}">添加IDC</a>
+            </caption>
+        {% endif %}
+        <tr>
+            <th>字母简称</th>
+            <th>idc中文名字</th>
+            <th>idc详细地址</th>
+            <th>idc联系人</th>
+            <th>idc联系人电话</th>
+            <th>idc联系人邮箱</th>
+        </tr>
+        {% for idc in object_list %}
+            <tr>
+                <td>{{ idc.name }}</td>
+                <td>{{ idc.idc_name }}</td>
+                <td>{{ idc.address }}</td>
+                <td>{{ idc.user }}</td>
+                <td>{{ idc.user_phone }}</td>
+                <td>{{ idc.user_email }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <div class="modal fade" id="create_group" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                {% if perms.auth.add_idc %}
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">×</button>
+                        <h4>添加IDC</h4>
+                    </div>
+                {% endif %}
+
+                <div class="modal-body form-inline">
+                    <div class="form-group">
+                        <label for="exampleInputName2">idc：</label>
+                        <input type="text" class="form-control" id="form_groupname" placeholder="请输入用户组名称"/>
+                    </div>
+                    <button class="btn btn-primary" id="create_group_btn">提交</button>
+                </div>
+                <div class="modal-footer">
+                    <input class="btn btn-default" data-dismiss="modal" aria-hidden="true" type="button" value="取消">
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    {#    模态框 查看组内成员S #}
+    <div class="modal fade" id="modal_show_group_users_list" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">×</button>
+                    <h4>用户组名: <span id="modal_show_group_users_list_title"></span></h4>
+                </div>
+                <div class="modal-body form-inline" id="modal_show_group_users_content_list">
+
+                </div>
+                <div class="modal-footer">
+                    <input class="btn btn-default" data-dismiss="modal" aria-hidden="true" type="button" value="确定">
+                </div>
+            </div>
+        </div>
+    </div>
+    {#    模态框 查看组内成员E#}
+
+
+{% endblock %}
+
+{% block js %}
+    <script>
+        $(function () {
+            // 添加IDC组
+            $("#add_idc").click(function () {
+                var create_group_modal = $("#create_group");
+                create_group_modal.modal("show");
+                //  执行添加用户组
+                $("#create_group_btn").click(function () {
+                    var group_input = $("#form_groupname");     // 找到
+                    var group_value = group_input.val();            // 取值
+                    create_group_modal.modal("hide");
+                    if (group_value == "") {
+                        // 简单验证
+                        swal("添加失败", "用户组名不能为空", 'error');
+                        //  当为空时取消默认行为
+                        return false;
+                    }
+                    //  提交 第一个参数为url 第二个参数为json数值  函数
+                    $.post("", {"name": group_value}, function (res) {
+                        if (res.status == 0) {
+                            swal({
+                                "title": "添加组成功",
+                                "text": "",
+                                "type": "success"
+                            }, function () { // 成功后执行此函数  刷新此页面
+                                setTimeout(function () {
+                                    window.location.reload();
+                                }, 50);
+                            })
+                        } else {
+                            // 操作失败
+                            swal("操作失败", res.errmsg, "error");
+                        }
+                    })
+                })
+            });
+
+        })
+    </script>
+
+{% endblock %}
+

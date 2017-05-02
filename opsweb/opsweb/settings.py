@@ -75,6 +75,16 @@ WSGI_APPLICATION = 'opsweb.wsgi.application'
 
 DATABASES = {
     'default': {
+        #################################
+        # sqlite3
+        #################################
+        # 'ENGINE': 'django.db.backends.sqlite3',
+        # 'NAME': 'reboot',
+
+
+        #################################
+        # mysql
+        #################################
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'reboot',
         'USER': 'zrd',
@@ -87,33 +97,31 @@ DATABASES = {
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'zh-hans'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Shanghai'
 
 USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
-LOGIN_URL = '/login/' # 跳转的url
+LOGIN_URL = '/login/'  # 跳转的url
 # STATIC_ROOT = os.path.join(BASE_DIR, "static")
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
 
-
 # 页面跳转模板
-TEMPLATE_JUMP  = "public/jump.html"
+TEMPLATE_JUMP = "public/jump.html"
 
 # 无权限显示页面 跳转
 PERMISSION_NONE_URL = '/permission/none/'
-
 
 LOGGING = {
     'version': 1,
@@ -121,36 +129,36 @@ LOGGING = {
     'loggers': {
         'opsweb': {
             'level': 'DEBUG',
-            'handlers': ['console_handle', 'opsweb_file_handler'],   # 可以输出多个目标
+            'handlers': ['console_handle', 'opsweb_file_handler'],  # 可以输出多个目标
         },
-        "django":{  # django 内置logger
-             "level"  : "DEBUG",
-            'handlers': [ 'django_handler'],
+        "django": {  # django 内置logger
+            "level": "DEBUG",
+            'handlers': ['django_handler'],
         },
-        "django.request":{  # django 内置logger  请求日志 400 500类的错
-             "level"  : "DEBUG",
-            'handlers': [ 'django_request_handler'],
+        "django.request": {  # django 内置logger  请求日志 400 500类的错
+            "level": "DEBUG",
+            'handlers': ['django_request_handler'],
         },
     },
     'handlers': {
         'console_handle': {
             'class': 'logging.StreamHandler',  # 打印到屏幕
-            'formatter':'opsweb',
+            'formatter': 'opsweb',
         },
-        'opsweb_file_handler':{
-            'class': 'logging.FileHandler', # 记录日志到文件中
-            'filename': os.path.join(BASE_DIR, "logs", 'opsweb.log'), # 相对路径 目录 文件名  （目录必须存在否则报错）
-            'formatter':'opsweb',
+        'opsweb_file_handler': {
+            'class': 'logging.FileHandler',  # 记录日志到文件中
+            'filename': os.path.join(BASE_DIR, "logs", 'opsweb.log'),  # 相对路径 目录 文件名  （目录必须存在否则报错）
+            'formatter': 'opsweb',
         },
-        'django_handler':{
+        'django_handler': {
             'class': 'logging.FileHandler',
             'filename': os.path.join(BASE_DIR, "logs", 'django.log'),
-            'formatter':'opsweb',
+            'formatter': 'opsweb',
         },
-        'django_request_handler':{
+        'django_request_handler': {
             'class': 'logging.FileHandler',
             'filename': os.path.join(BASE_DIR, "logs", 'django_request.log'),
-            'formatter':'opsweb',
+            'formatter': 'opsweb',
         },
     },
     'formatters': {

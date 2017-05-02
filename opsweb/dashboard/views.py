@@ -5,7 +5,6 @@ import base64
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse, QueryDict
 from django.views.generic import View
-from django.template import Context, loader, RequestContext, Template
 from django.contrib.auth import authenticate, login, logout
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import permission_required  # 权限验证
@@ -58,6 +57,8 @@ def login_view(request):
         if user is not None:
             if user.is_active:
                 login(request, user)
+
+                request.session.set_expiry(3000) # 设置过期时间
                 ret['next_url'] = "/"
             else:
                 ret['status'] = 1
@@ -80,7 +81,7 @@ def login_view(request):
             response_data.set_cookie("password", password_, expires=time_)
             response_data.set_cookie("username", username, expires=time_)
             # 标识是否已经登录历史
-            response_data.set_cookie("has_login", '1', expires=time_)
+            response_data.set_cookie("has_login", '1', )
 
         return response_data
 

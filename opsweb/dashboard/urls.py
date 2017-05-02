@@ -3,6 +3,8 @@ from django.conf.urls import include, url
 from . import views
 from dashboard import user
 from dashboard.user import group
+from dashboard.server import idc, ServerInforReport
+
 
 urlpatterns = [
     url(r'^login/$', views.login_view, name='login'),
@@ -36,4 +38,15 @@ urlpatterns = [
         # 一个组的权限
         url(r'^permissions/$', group.GroupPermissionView.as_view(), name='one_group_permission'),
     ])),
+
+    url(r'server/', include([
+        url(r'idc/',include([
+            url(r'add/$', idc.AddIdcView.as_view(), name='add_idc'),
+            url(r'list/$', idc.IdcListView.as_view(), name='idc_list'),
+        ])),
+
+
+        url(r"^report/$", ServerInforReport.as_view(), name="report_server"),
+    ])),
+
 ]
