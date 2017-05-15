@@ -1,0 +1,14 @@
+{% extends "public/layout.html" %}
+
+{% block body %}
+    <div class="col-sm-4">
+        <table class="table table-striped">
+            {% for permission in permissions %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ permission.name }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% endblock %}

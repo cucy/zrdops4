@@ -1,0 +1,83 @@
+{% extends "public/layout.html" %}
+
+{% load reboot %}
+
+{% block body %}
+    <form class="form-inline">
+        <div class="form-group">
+            <input class="form-control" type="text" name="hostname" value="{{ hostname }}" placeholder="搜索主机名">
+        </div>
+        <div class="form-group">
+            <input class="form-control" type="text" name="inner_ip" value="{{ inner_ip }}" placeholder="搜索ip地址">
+        </div>
+        <button type="submit" class="btn btn-primary">查询</button>
+    </form>
+    <table class="table table-striped">
+        <!--<caption><a href="{% url 'idc_add' %}" class="btn btn-primary">添加</a></caption>-->
+        <tr>
+            <th>#</th>
+            <th>主机名</th>
+            <th>Ip地址</th>
+            <th>状态</th>
+            <th>CPU</th>
+            <th>MEM</th>
+            <th>DISK</th>
+            <th>操作</th>
+
+        </tr>
+        {% for server in object_list %}
+        <tr>
+            <td>{{ forloop.counter|sssss:"2" }}</td>
+            <td>{{ server.hostname }}</td>
+            <td>{{ server.inner_ip }}</td>
+            <td>{{ server.status|default_if_none:"" }}</td>
+            <td>{{ server.server_cpu }}</td>
+            <td>{{ server.server_mem }}</td>
+            <td>{{ server.server_disk }}</td>
+            <td>
+                <div class="btn-group">
+                    <div class="btn-group">
+                        <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="false">
+                            修改
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                            <li role="presentation"><a role="menuitem" tabindex="-1" href="{% url 'modify_server_status' %}?id={{ server.id }}&next={{ request.get_full_path|urlencode }}">服务器状态</a></li>
+                        </ul>
+                    </div>
+                    {% if user.is_active %}
+                        <button type="button" class="btn btn-sm btn-warning modify_user_status" status="true" data="{{ user.id }}">禁用</button>
+                    {% else %}
+                        <button type="button" class="btn btn-sm modify_user_status btn-info" status="false" data="{{ user.id }}">开启</button>
+                    {% endif %}
+                </div>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <div class="panel-default">
+        <center>
+            <ul class="pagination">
+                <li><a href="{% url "server_list" %}?page=1&{{ uri }}">首页</a></li>
+                    {% if page_obj.has_previous %}
+                    <li><a href="{% url "server_list" %}?page={{ page_obj.previous_page_number }}&{{ uri }}">上一页</a></li>
+                    {% else %}
+                        <li class="disabled"><a href="#">上一页</a></li>
+                    {% endif %}
+
+                    {# {% for p in page_obj.paginator.page_range %} #}
+                    {% for p in page_range %}
+                        <li {% if page_obj.number == p %} class="active" {% endif %}><a href="{% url "server_list" %}?page={{ p }}&{{ uri }}">{{ p }}</a></li>
+                    {% endfor %}
+
+                    {% if page_obj.has_next %}
+                        <li><a href="{% url "server_list" %}?page={{ page_obj.next_page_number }}&{{ uri }}">下一页</a></li>
+                    {% else %}
+                        <li class="disabled"><a href="#">下一页</a></li>
+                    {% endif %}
+                <li><a href="{% url "server_list" %}?page={{ page_obj.paginator.num_pages }}&{{ uri }}">末页</a></li>
+            </ul>
+        </center>
+    </div>
+{% endblock %}
+

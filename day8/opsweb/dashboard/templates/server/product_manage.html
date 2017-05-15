@@ -1,0 +1,97 @@
+{% extends "public/layout.html" %}
+
+{% block css %}
+    <link href="/static/zTree_v3-master/css/zTreeStyle/zTreeStyle.css" rel="stylesheet" type="text/css">
+    <style>
+    .ztree * {padding:0; margin:0; font-size:16px;}
+    #productinfo{width:100%;height: 100%;display: none}
+    #productinfo ul li{line-height: 45px;font-size: 16px;}
+    #productinfo ul li label{display: inline-block;width:100px;text-align: right;font-weight: bold;margin-right:25px;}
+    #productinfo ul li button{margin-left:125px;}
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="col-xs-3">
+        <a type="button" class="btn btn-primary" href="{% url 'product_add' %}">添加</a>
+        <div id="ztree" class="ztree"></div>
+    </div>
+    <div class="col-xs-9">
+        <div id="productinfo">
+            <ul class="list-unstyled">
+                <li><label>业务线名称: </label><span id="info_service_name"></span></li>
+                <li><label>上级业务线: </label><span id="info_pid"></span></li>
+                <li><label>业务线简称: </label><span id="info_module_letter"></span></li>
+                <li><label>业务负责人: </label><span id="info_dev_interface"></span></li>
+                <li><label>运维负责人: </label><span id="info_op_interface"></span></li>
+                <li>
+                    <button type="button" class="btn btn-primary">修改</button>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+
+{% endblock %}
+
+
+{% block js %}
+    <script type="text/javascript" src="/static/zTree_v3-master/js/jquery.ztree.core.js"></script>
+
+
+    <script>
+        var product_id;                                 // 当前点击的业务线id
+        var productinfo_obj = $("#productinfo");        // 展示product的div
+        // 展示product的字段
+        var info_service_name_obj = $("#info_service_name");
+        var info_pid_obj = $("#info_pid");
+        var info_module_letter_obj = $("#info_module_letter");
+        var info_dev_interface_obj = $("#info_dev_interface");
+        var info_op_interface_obj = $("#info_op_interface");
+
+        function show_product_info(){
+            productinfo_obj.hide()
+            $.get("/server/product/manage/get",{"id": product_id}, function(res){
+                if(res.status != 0){
+                    swal("错误", res.errmsg, "error")
+                }else{
+                    info_service_name_obj.html(res.data.name);
+                    info_pid_obj.html(res.data.p_product_id);
+                    info_module_letter_obj.html(res.data.module_letter);
+                    info_dev_interface_obj.html(res.data.dev_interface);
+                    info_op_interface_obj.html(res.data.op_interface);
+                    productinfo_obj.fadeIn("fast")
+                }
+            })
+        }
+
+
+        function zTreeOnClick(event, treeId, treeNode) {
+            //console.log(treeNode.tId + ", " + treeNode.name);
+            product_id = treeNode.id;
+            show_product_info()
+        }
+    
+    
+        var zTreeObj;
+       // zTree 的参数配置，深入使用请参考 API 文档（setting 配置详解）
+       var setting = {
+            callback: {
+                onClick: zTreeOnClick
+            },
+            view: {
+                fontCss : {fontSize:"16px"}
+            }
+       };
+       // zTree 的数据属性，深入使用请参考 API 文档（zTreeNode 节点数据详解）
+
+       var zNodes = {{ znodes|safe }};
+
+       $(function(){
+           zTreeObj = $.fn.zTree.init($("#ztree"), setting, zNodes);
+       })
+
+
+
+    </script>
+{% endblock %}
