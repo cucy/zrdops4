@@ -1,0 +1,199 @@
+{% extends "public/layout.html" %}
+
+{% block body %}
+    <form class="form-inline">
+        <div class="form-group">
+            <input type="text" class="form-control" name="hostname" value="{{ hostname }}" placeholder="搜索主机名">
+
+        </div>
+        <div class="form-group">
+            <input type="text" class="form-control" name="ip_info" value="{{ ip_info }}" placeholder="搜索主机名">
+            <button type="submit" class="btn btn-primary">提交</button>
+        </div>
+    </form>
+    <table class="table table-striped">
+
+        {% if perms.auth.add_idc %}
+            <caption>
+                <a id="add_idc" class="btn btn-primary" type="button" href="{% url 'add_idc' %}">添加IDC</a>
+            </caption>
+        {% endif %}
+        <tr>
+            <th>业务线</th>
+            <th>上级业务线</th>
+            <th>主机名</th>
+            <th>IP地址</th>
+            <th>状态</th>
+            <th>CPU</th>
+            <th>memory</th>
+            <th>disk</th>
+            <th>操作</th>
+        </tr>
+        {% for server in object_list %}
+            <tr>
+                <td>{% if server.product_set.first.name %}
+                    {{ server.product_set.first.name}}
+                    {% else %}
+                    未设置
+                {% endif %}</td>
+                <td>{% if server.product_set.first.p_product.name %}
+                    {{ server.product_set.first.p_product.name }}
+                      {% else %}
+                    未设置
+                {% endif %}</td>
+                <td>{{ server.hostname }}</td>
+                <td>{{ server.ip_info }}</td>
+                <td>{{ server.status|default_if_none:"未知" }}</td>
+                <td>{{ server.server_cpu }}</td>
+                <td>{{ server.server_mem }}</td>
+                <td>{{ server.server_disk }}</td>
+                <td>
+                    <div class="btn-group">
+                        <div class="btn-group">
+                            <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenu1"
+                                    data-toggle="dropdown" aria-expanded="false">
+                                修改
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+
+
+                                <li role="presentation"><a role="menuitem" tabindex="-1"
+                                                                                                                {# 处理URL #}
+                                                           href="{% url 'modify_server_status' %}?id={{ server.id }}&next={{ request.get_full_path|urlencode }}">服务器状态</a>
+                                </li>
+
+
+
+                            </ul>
+                        </div>
+
+
+                        <button type="button" class="btn btn-sm btn-warning modify_user_status" status="true" data="1">
+                            禁用
+                        </button>
+
+
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <div class="modal fade" id="create_group" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                {% if perms.auth.add_idc %}
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">×</button>
+                        <h4>添加IDC</h4>
+                    </div>
+                {% endif %}
+
+                <div class="modal-body form-inline">
+                    <div class="form-group">
+                        <label for="exampleInputName2">idc：</label>
+                        <input type="text" class="form-control" id="form_groupname" placeholder="请输入用户组名称"/>
+                    </div>
+                    <button class="btn btn-primary" id="create_group_btn">提交</button>
+                </div>
+                <div class="modal-footer">
+                    <input class="btn btn-default" data-dismiss="modal" aria-hidden="true" type="button" value="取消">
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    {#    模态框 查看组内成员S #}
+    <div class="modal fade" id="modal_show_group_users_list" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">×</button>
+                    <h4>用户组名: <span id="modal_show_group_users_list_title"></span></h4>
+                </div>
+                <div class="modal-body form-inline" id="modal_show_group_users_content_list">
+
+                </div>
+                <div class="modal-footer">
+                    <input class="btn btn-default" data-dismiss="modal" aria-hidden="true" type="button" value="确定">
+                </div>
+            </div>
+        </div>
+    </div>
+    {#    模态框 查看组内成员E#}
+{# 分页s #}
+<div class="panel-default">
+        <center>
+            <ul class="pagination">
+                <li><a href="{% url 'server_list' %}?page=1&{{ uri }}">首页</a></li>
+                {% if page_obj.has_previous %}
+                    <li><a href="{% url 'server_list' %}?page={{ page_obj.previous_page_number }}&{{ uri }}">上一页</a></li>
+                {% else %}
+                    <li class="disabled"><a href="#">上一页</a></li>
+                {% endif %}
+
+                {# {% for p in page_obj.paginator.page_range %} #}
+                {% for p in page_range %}
+                    <li {% if page_obj.number == p %} class="active" {% endif %}><a
+                            href="{% url 'server_list' %}?page={{ p }}">{{ p }}</a></li>
+                {% endfor %}
+
+                {% if page_obj.has_next %}
+                    <li><a href="{% url 'server_list' %}?page={{ page_obj.next_page_number }}&{{ uri }}">下一页</a></li>
+                {% else %}
+                    <li class="disabled"><a href="#">下一页</a></li>
+                {% endif %}
+                <li><a href="{% url 'server_list' %}?page={{ page_obj.paginator.num_pages }}&{{ uri }}">末页</a></li>
+            </ul>
+        </center>
+    </div>
+    {# 分页e #}
+{% endblock %}
+
+{% block js %}
+    <script>
+        $(function () {
+            // 添加IDC组
+            $("#add_idc").click(function () {
+                var create_group_modal = $("#create_group");
+                create_group_modal.modal("show");
+                //  执行添加用户组
+                $("#create_group_btn").click(function () {
+                    var group_input = $("#form_groupname");     // 找到
+                    var group_value = group_input.val();            // 取值
+                    create_group_modal.modal("hide");
+                    if (group_value == "") {
+                        // 简单验证
+                        swal("添加失败", "用户组名不能为空", 'error');
+                        //  当为空时取消默认行为
+                        return false;
+                    }
+                    //  提交 第一个参数为url 第二个参数为json数值  函数
+                    $.post("", {"name": group_value}, function (res) {
+                        if (res.status == 0) {
+                            swal({
+                                "title": "添加组成功",
+                                "text": "",
+                                "type": "success"
+                            }, function () { // 成功后执行此函数  刷新此页面
+                                setTimeout(function () {
+                                    window.location.reload();
+                                }, 50);
+                            })
+                        } else {
+                            // 操作失败
+                            swal("操作失败", res.errmsg, "error");
+                        }
+                    })
+                })
+            });
+
+        })
+    </script>
+
+{% endblock %}
+
