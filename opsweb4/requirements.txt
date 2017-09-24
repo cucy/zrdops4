@@ -1,0 +1,4 @@
+dj-pagination==2.3.0
+Django==1.11.5
+mysqlclient==1.3.12
+zabbix-client==0.1.1

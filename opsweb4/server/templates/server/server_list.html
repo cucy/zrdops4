@@ -1,0 +1,101 @@
+{% extends "public/layout.html" %}
+{% load static %}
+{% load custom %}
+
+{% block css %}
+    <style>
+        .dropdown-menu{min-width:110px;}
+        .action{width:120px;}
+        .hostname{white-space: nowrap}
+    </style>
+{% endblock %}
+
+
+{% block breadcrumb %}
+<li><a href="#">资源平台</a><span class="divider"></span></li>
+<li class="active">服务器列表</li>
+{% endblock %}
+
+{% block body %}
+    <form class="form-inline" role="form" id="server_search">
+    <div class="form-group">
+        <input class="form-control" type="text" name="hostname" value="{{ search.hostname }}" placeholder="搜索主机名" autocomplete="off">
+    </div>
+    <div class="form-group">
+        <input type="text" class="form-control" name="inner_ip" autocomplete="off" value="{{ search.inner_ip }}" placeholder="搜索ip地址">
+    </div>
+    <button type="submit" class="btn btn-primary">查询</button>
+
+</form>
+
+     <!-- 服务器列表 -->
+    <table class="table table-striped">
+    <thead>
+        <tr>
+            <th class="hostname">主机名</th>
+            <th>ip地址</th>
+            <th>业务线</th>
+            <th>产品线</th>
+            <th>状态</th>
+            <th>cpu</th>
+            <th>disk</th>
+            <th>mem</th>
+            <th>更新时间</th>
+            <th class="action">操作</th>
+
+        </tr>
+    </thead>
+    <tbody>
+      {% load pagination_tags %}
+      {% autopaginate server_list %}
+      {% for server in server_list %}
+        <tr>
+            <td class="hostname">{{ server.hostname }}</td>
+            <td>{{ server.inner_ip }}</td>
+            <td>{{ products|get_item:server.service_id }}</td>
+            <td>{{ server.server_purpose.service_name }}</td>
+            <td>{% if server.status %}{{ server.status }}{% endif %}</td>
+            <td>{{ server.server_cpu }}</td>
+            <td>{{ server.server_disk }}G</td>
+            <td>{{ server.server_mem }}</td>
+
+            <td>{{ server.check_update_time|date:"Y-m-d H:i:s" }}</td>
+            <td>
+                <div class="btn-group">
+                    <div class="btn-group">
+                        <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
+                            修改
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                            <li role="presentation"><a role="menuitem" tabindex="-1"  href="{%  url 'modify_server_status' pk=server.id  %}">状态</a></li>
+                            <li role="presentation"><a role="menuitem" tabindex="-1"  href="{% url 'modify_server_product' pk=server.id  %}?next={{ request.get_full_path|urlencode }}">业务线</a></li>
+                        </ul>
+                    </div>
+                    {% if user.is_active %}
+                        <button type="button" class="btn btn-sm btn-warning modify_user_status" status={{ user.is_active|lower  }} data="{{ user.id }}">禁用</button>
+                    {% else %}
+                        <button type="button" class="btn btn-info btn-sm modify_user_status" status={{ user.is_active|lower }} data="{{ user.id }}">开启</button>
+                    {% endif %}
+                </div>
+            </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+</table>
+
+    <!-- 分页 -->
+    <div class="panel-default text-center">
+        {% paginate using 'public/pagination.html' %}
+    </div>
+
+{% endblock %}
+
+{% block js %}
+<script>
+
+$(function(){
+
+})
+</script>
+{% endblock %}
